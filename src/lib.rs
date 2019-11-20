@@ -2,57 +2,57 @@
 use js_ffi::*;
 
 pub struct Console {
-    fn_log:JSValue,
-    fn_clear:JSValue,
-    fn_error:JSValue,
-    fn_warning:JSValue,
-    fn_time:JSValue,
-    fn_time_end:JSValue,
+    fn_log:JSInvoker,
+    fn_clear:JSInvoker,
+    fn_error:JSInvoker,
+    fn_warning:JSInvoker,
+    fn_time:JSInvoker,
+    fn_time_end:JSInvoker,
 }
 
 impl Default for Console {
     fn default() -> Self {
         Console {
-            fn_log:register("console.log"),
-            fn_clear:register("console.clear"),
-            fn_error:register("console.error"),
-            fn_warning:register("console.warn"),
-            fn_time:register("console.time"),
-            fn_time_end:register("console.timeEnd"),
+            fn_log:js!(console.log),
+            fn_clear:js!(console.clear),
+            fn_error:js!(console.error),
+            fn_warning:js!(console.warn),
+            fn_time:js!(console.time),
+            fn_time_end:js!(console.timeEnd),
         }
     }
 }
 
 impl Console {
     pub fn clear(&self){
-        call_0(UNDEFINED,self.fn_clear);
+        self.fn_clear.invoke_0();
     }
 
     pub fn log(&self,msg:&str){
-        call_1(UNDEFINED,self.fn_log,TYPE_STRING,to_js_string(msg));
+        self.fn_log.invoke_1(msg);
     }
 
     pub fn warning(&self,msg:&str){
-        call_1(UNDEFINED,self.fn_warning,TYPE_STRING,to_js_string(msg));
+        self.fn_warning.invoke_1(msg);
     }
 
     pub fn error(&self,msg:&str){
-        call_1(UNDEFINED,self.fn_error,TYPE_STRING,to_js_string(msg));
+        self.fn_error.invoke_1(msg);
     }
 
     pub fn time(&self,label:Option<&str>){
         if label.is_none() {
-            call_0(UNDEFINED,self.fn_time);
+            self.fn_time.invoke_0();
         } else {
-            call_1(UNDEFINED,self.fn_time,TYPE_STRING,to_js_string(label.unwrap()));
+            self.fn_time.invoke_1(label.unwrap());
         }
     }
 
     pub fn time_end(&self,label:Option<&str>){
         if label.is_none() {
-            call_0(UNDEFINED,self.fn_time_end);
+            self.fn_time_end.invoke_0();
         } else {
-            call_1(UNDEFINED,self.fn_time_end,TYPE_STRING,to_js_string(label.unwrap()));
+            self.fn_time_end.invoke_1(label.unwrap());
         }
     }
 }
