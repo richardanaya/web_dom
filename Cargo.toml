@@ -1,6 +1,6 @@
 [package]
 name = "web_console"
-version = "0.0.4"
+version = "0.1.0"
 authors = ["Richard Anaya"]
 edition = "2018"
 license = "MIT OR Apache-2.0"
@@ -12,3 +12,4 @@ readme = "README.md"
 
 [dependencies]
 js_ffi = "0.6"
+globals = "1"
