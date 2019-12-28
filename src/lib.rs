@@ -1,82 +1,35 @@
 #![no_std]
 use js_ffi::*;
 
-struct Console {
-    fn_log: JSInvoker,
-    fn_clear: JSInvoker,
-    fn_error: JSInvoker,
-    fn_warning: JSInvoker,
-    fn_time: JSInvoker,
-    fn_time_end: JSInvoker,
+struct Dom {
+    fn_query_selector: JSInvoker,
+    fn_add_event_listener: JSInvoker,
 }
 
-impl Default for Console {
+impl Default for Dom {
     fn default() -> Self {
-        Console {
-            fn_log: js!(console.log),
-            fn_clear: js!(console.clear),
-            fn_error: js!(console.error),
-            fn_warning: js!(console.warn),
-            fn_time: js!(console.time),
-            fn_time_end: js!(console.timeEnd),
+        Dom {
+            fn_query_selector: js!(console.log),
+            fn_add_event_listener: js!(console.clear),
         }
     }
 }
 
-impl Console {
-    fn clear(&self) {
-        self.fn_clear.invoke_0();
+impl Dom {
+    fn query_selector(&self, el: &JSObject, selector: &str) -> JSObject {
+        JSObject(self.fn_query_selector.invoke_2(el, selector))
     }
 
-    fn log(&self, msg: &str) {
-        self.fn_log.invoke_1(msg);
-    }
-
-    fn warning(&self, msg: &str) {
-        self.fn_warning.invoke_1(msg);
-    }
-
-    fn error(&self, msg: &str) {
-        self.fn_error.invoke_1(msg);
-    }
-
-    fn time(&self, label: Option<&str>) {
-        if label.is_none() {
-            self.fn_time.invoke_0();
-        } else {
-            self.fn_time.invoke_1(label.unwrap());
-        }
-    }
-
-    fn time_end(&self, label: Option<&str>) {
-        if label.is_none() {
-            self.fn_time_end.invoke_0();
-        } else {
-            self.fn_time_end.invoke_1(label.unwrap());
-        }
+    fn add_event_listener(&self, el: &JSObject, event_type: &str, callback: JSFunction) {
+        self.fn_add_event_listener
+            .invoke_3(el, event_type, callback);
     }
 }
 
-pub fn clear() {
-    globals::get::<Console>().clear();
+pub fn query_selector(el: &JSObject, selector: &str) -> JSObject {
+    globals::get::<Dom>().query_selector(el, selector)
 }
 
-pub fn log(msg: &str) {
-    globals::get::<Console>().log(msg);
-}
-
-pub fn warning(msg: &str) {
-    globals::get::<Console>().warning(msg);
-}
-
-pub fn error(msg: &str) {
-    globals::get::<Console>().error(msg);
-}
-
-pub fn time(label: Option<&str>) {
-    globals::get::<Console>().time(label);
-}
-
-pub fn time_end(label: Option<&str>) {
-    globals::get::<Console>().time_end(label);
+pub fn add_event_listener(el: &JSObject, event_type: &str, callback: JSFunction) {
+    globals::get::<Dom>().add_event_listener(el, event_type, callback);
 }
