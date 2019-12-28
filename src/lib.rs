@@ -17,7 +17,7 @@ impl Default for Dom {
 
 impl Dom {
     fn query_selector(&self, el: &JSObject, selector: &str) -> JSObject {
-        JSObject(self.fn_query_selector.call_1(el, selector))
+        JSObject(self.fn_query_selector.invoke_2(el, selector))
     }
 
     fn add_event_listener(&self, el: &JSObject, event_type: &str, callback: JSFunction) {
