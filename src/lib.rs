@@ -9,7 +9,7 @@ struct Dom {
 impl Default for Dom {
     fn default() -> Self {
         Dom {
-            fn_query_selector: js!(document.querySelector),
+            fn_query_selector: js!((el,selector)=>el.querySelector(selector)),
             fn_add_event_listener: js!(Node.prototype.addEventListener),
         }
     }
